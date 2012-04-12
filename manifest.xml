@@ -1,0 +1,16 @@
+<package>
+  <description brief="App Manager for Android">
+
+    Client side code for accessing the app manager from Android, plus some client apps which use it.
+
+  </description>
+  <author>Dave Hershberger/hersh@willowgarage.com, Ken Conley/kwc@willowgarage.com</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/appman_android</url>
+  <depend package="appmanandroid"/>
+
+  <export>
+    <rosjava-android-app target="android-9" />
+  </export>
+</package>

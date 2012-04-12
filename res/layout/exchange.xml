@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+  <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content"
+                android:background="#ff404040"
+	        android:id="@+id/exchange_top_bar" >
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:id="@+id/exchange_robot_name_view"
+              android:textSize="30sp" /> 
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:id="@+id/installed_apps_view" >
+    <TextView android:layout_width="fill_parent" android:layout_height="50dp"
+	      android:text="Installed Apps"
+              android:textSize="30sp" /> 
+    <ListView android:layout_width="fill_parent"
+	      android:layout_height="0dip"
+	      android:layout_weight="1"
+	      android:id="@+id/installed_app_list"
+	      android:divider="#00000000" 
+	      android:dividerHeight="0sp" 
+	      android:footerDividersEnabled="true"
+	      android:headerDividersEnabled="true" />
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="ROS Exchange"
+            android:onClick="startAppExchange" />
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="Return"
+            android:onClick="exitAppExchange" />
+  </LinearLayout>
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:id="@+id/app_exchange_view" >
+    <TextView android:layout_width="fill_parent" android:layout_height="50dp"
+	      android:text="Available Apps"
+              android:textSize="30sp" /> 
+    <ListView android:layout_width="fill_parent"
+	      android:layout_height="0dip"
+	      android:layout_weight="1"
+	      android:id="@+id/available_app_list"
+	      android:divider="#00000000" 
+	      android:dividerHeight="0sp" 
+	      android:footerDividersEnabled="true"
+	      android:headerDividersEnabled="true" />
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="Update"
+            android:onClick="updateAppExchange" />
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="Installed Apps"
+            android:onClick="startInstalledApps" />
+  </LinearLayout>
+
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:id="@+id/app_detail_view" >
+    <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:background="#00000000" >
+      <ImageView android:layout_width="80dp"
+		 android:layout_height="80dp"
+		 android:id="@+id/exchange_icon"
+		 android:src="@drawable/icon"
+		 android:adjustViewBounds="true"
+		 android:gravity="bottom|center_horizontal"/>
+      <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:id="@+id/exchange_app_name_view"
+		android:textSize="30sp" /> 
+    </LinearLayout>
+    <TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:id="@+id/exchange_app_detail_text_view" /> 
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="Install/Upgrade App"
+            android:id="@+id/install_app_button"
+            android:onClick="installApp" />
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="Uninstall App"
+            android:id="@+id/uninstall_app_button"
+            android:onClick="uninstallApp" />
+    <Button android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" 
+            android:text="View Other Apps"
+            android:onClick="closeDetailView" />
+  </LinearLayout>
+</LinearLayout>
+
