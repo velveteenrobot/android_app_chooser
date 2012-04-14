@@ -112,7 +112,7 @@ public class AppLauncher {
     // Loop over all android apps, trying to launch one.
     for (int i = 0; i < appropriateAndroidApps.size(); i++) {
       ClientAppData appData = appropriateAndroidApps.get(i);
-      Intent intent = appData.createIntent(parentActivity.getApplicationContext(), start);
+      Intent intent = appData.createIntent(parentActivity.getApplicationContext(), true);
       intent.putExtra(AppManager.PACKAGE + ".robot_app_name", app.name);
       try {
         className = intent.getAction();
@@ -123,6 +123,21 @@ public class AppLauncher {
         Log.i("RosAndroid", "activity not found for action: " + intent.getAction());
       }
     }
+    for (int i = 0; i < appropriateAndroidApps.size(); i++) {
+      ClientAppData appData = appropriateAndroidApps.get(i);
+      Intent intent = appData.createIntent(parentActivity.getApplicationContext(), false);
+      intent.putExtra(AppManager.PACKAGE + ".robot_app_name", app.name);
+
+      try {
+        className = intent.getAction();
+        Log.i("RosAndroid", "trying to startActivity( action: " + intent.getAction() + " )");
+        parentActivity.startActivityForResult(intent, 0);
+        return;
+    } catch (ActivityNotFoundException e) {
+        Log.i("RosAndroid", "activity not found for action: " + intent.getAction());
+      }
+    }
+    
 
     final String installPackage = className.substring(0, className.lastIndexOf("."));
 

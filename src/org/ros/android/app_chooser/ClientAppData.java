@@ -57,18 +57,20 @@ public class ClientAppData {
     appData = clientApp.app_data;
   }
 
-  public Intent createIntent(Context context, boolean start) {
+  public Intent createIntent(Context context, boolean getPackageIntent) {
     Intent intent = new Intent();
 
     // Set up standard intent fields.
     if( managerData.get("intent-action" ) != null ) {
-      if (!start) {
+     /* if (!start) {
         intent.setAction(managerData.get("intent-action"));
         intent.putExtra("stop", "stop");
         return intent;
       }
+     */
 
       //intent.setAction(managerData.get("intent-action"));
+      if (getPackageIntent) {
       String s = managerData.get("intent-action");
       String delimiter = "\\.";
       String str = "";
@@ -80,7 +82,21 @@ public class ClientAppData {
       }
       str += package_array[2];
       Log.i("ClientAppData", "str is: " + str);
-      intent = context.getPackageManager().getLaunchIntentForPackage(str);
+
+      
+        intent = context.getPackageManager().getLaunchIntentForPackage(str);
+      } else { 
+        Log.i("ClientAppData", "Second try!");        
+        intent = new Intent();
+        intent.setAction(managerData.get("intent-action"));
+     }
+     if (intent == null) {
+               Log.i("ClientAppData", "Null intent");
+        intent = new Intent();
+        intent.setAction(managerData.get("intent-action"));
+     }
+        //intent.addCategory("android.intent.category.LAUNCHER");
+        //intent.addCategory("android.intent.category.DEFAULT");
       //if (!start) {
       //intent.putExtra("stop", "stop");
       //return intent;
