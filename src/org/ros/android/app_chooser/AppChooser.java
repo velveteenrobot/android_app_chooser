@@ -225,15 +225,22 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
           int i = 0;
           for (i = 0; i<availableAppsCache.size(); i++) {
             App item = availableAppsCache.get(i);
+            ArrayList<String> clients = new ArrayList<String>();
             for (int j = 0; j< item.client_apps.size(); j++) {
-              if (!item.client_apps.get(j).client_type.equals("android")) {
+              /*if (!item.client_apps.get(j).client_type.equals("android")) {
                 availableAppsCache.remove(i);
                 i--;
               } else {
                 Log.i("AppChooser", "Item name: " + item.name );
                 runningAppsNames.add(item.name);
-              }  
+              } */ 
+              clients.add(item.client_apps.get(j).client_type);
             }
+            if (!clients.contains("android") && item.client_apps.size() != 0) {
+              availableAppsCache.remove(i);
+              i--;
+            }
+            
             if (item.client_apps.size() == 0) {
               Log.i("AppChooser", "Item name: " + item.name );
               runningAppsNames.add(item.name);
@@ -242,13 +249,13 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
           //if (runningAppsCache.size() != 0) {
           //  availableAppsCache.add(runningAppsCache.get(0));
           //}
-          for (int k = 0; k < runningAppsCache.size(); k++) {
+          /*for (int k = 0; k < runningAppsCache.size(); k++) {
             App runningItem = runningAppsCache.get(k);
             Log.i("AppChooser", "Running item name: " + runningItem.name );
             if (!runningAppsNames.contains(runningItem.name)) {
               availableAppsCache.add(runningItem);
             }
-          }
+          }*/
           Log.i("RosAndroid", "ListApps.Response: " + availableAppsCache.size() + " apps");
           availableAppsCacheTime = System.currentTimeMillis();
           runOnUiThread(new Runnable() {
@@ -377,17 +384,23 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
           int i = 0;
           for (i = 0; i<availableAppsCache.size(); i++) {
             App item = availableAppsCache.get(i);
-            Log.i("AppChooser", "Item name: " + item.name );
+            ArrayList<String> clients = new ArrayList<String>();
             for (int j = 0; j< item.client_apps.size(); j++) {
-              if (!item.client_apps.get(j).client_type.equals("android")) {
+              /*if (!item.client_apps.get(j).client_type.equals("android")) {
                 availableAppsCache.remove(i);
                 i--;
               } else {
                 Log.i("AppChooser", "Item name: " + item.name );
                 runningAppsNames.add(item.name);
-              }
+              }*/ 
+              clients.add(item.client_apps.get(j).client_type);
             }
-            if (item.client_apps.size() == 0) {
+
+            if (!clients.contains("android") && item.client_apps.size() != 0) {
+              availableAppsCache.remove(i);
+            }
+
+              if (item.client_apps.size() == 0) {
               Log.i("AppChooser", "Item name: " + item.name );
               runningAppsNames.add(item.name);
             }
@@ -396,13 +409,13 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
           //if (runningAppsCache.size() != 0) {
           //  availableAppsCache.add(runningAppsCache.get(0));
           //}
-          for (int k = 0; k < runningAppsCache.size(); k++) {
+          /*for (int k = 0; k < runningAppsCache.size(); k++) {
             App runningItem = runningAppsCache.get(k);
             Log.i("AppChooser", "Running item name: " + runningItem.name );
             if (!runningAppsNames.contains(runningItem.name)) {
               availableAppsCache.add(runningItem);
             }
-          }
+          } */
           Log.i("RosAndroid", "ListApps.Response: " + availableAppsCache.size() + " apps");
           availableAppsCacheTime = System.currentTimeMillis();
           runOnUiThread(new Runnable() {
@@ -597,8 +610,24 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
       });
   }
 
-  @Override
+  /*@Override
   public boolean onCreateOptionsMenu(Menu menu) {
+    menu.clear();
+    MenuInflater inflater = getMenuInflater();
+    if (mode == REG) {
+      inflater.inflate(R.menu.app_chooser_menu, menu);
+      return true;
+    } else if (mode == DEV) {
+      inflater.inflate(R.menu.app_chooser_menu_dev, menu);
+      return true;
+    } else {
+      return false;
+    }
+  }*/
+
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
+    menu.clear();
     MenuInflater inflater = getMenuInflater();
     if (mode == REG) {
       inflater.inflate(R.menu.app_chooser_menu, menu);
