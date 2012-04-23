@@ -89,6 +89,7 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
   private static final int DEV = 0;
   private static final int REG = 1;
   private static final int CLOSE_EXISTING = 0;
+  private static final int MULTI_APP_DISABLED = 1;
   private int mode = REG;
 
   public AppChooser() {
@@ -174,6 +175,9 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
           public void onSuccess(StartApp.Response message) {
             if (message.started) {
               safeSetStatus("Started");
+            } else if (message.error_codes == StatusCodes.MULTIAPP_NOT_SUPPORTED) {
+              
+
             } else {
               safeSetStatus(message.message);
             }
@@ -227,13 +231,6 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
             App item = availableAppsCache.get(i);
             ArrayList<String> clients = new ArrayList<String>();
             for (int j = 0; j< item.client_apps.size(); j++) {
-              /*if (!item.client_apps.get(j).client_type.equals("android")) {
-                availableAppsCache.remove(i);
-                i--;
-              } else {
-                Log.i("AppChooser", "Item name: " + item.name );
-                runningAppsNames.add(item.name);
-              } */ 
               clients.add(item.client_apps.get(j).client_type);
             }
             if (!clients.contains("android") && item.client_apps.size() != 0) {
@@ -246,16 +243,6 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
               runningAppsNames.add(item.name);
             }
           }
-          //if (runningAppsCache.size() != 0) {
-          //  availableAppsCache.add(runningAppsCache.get(0));
-          //}
-          /*for (int k = 0; k < runningAppsCache.size(); k++) {
-            App runningItem = runningAppsCache.get(k);
-            Log.i("AppChooser", "Running item name: " + runningItem.name );
-            if (!runningAppsNames.contains(runningItem.name)) {
-              availableAppsCache.add(runningItem);
-            }
-          }*/
           Log.i("RosAndroid", "ListApps.Response: " + availableAppsCache.size() + " apps");
           availableAppsCacheTime = System.currentTimeMillis();
           runOnUiThread(new Runnable() {
@@ -386,13 +373,7 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
             App item = availableAppsCache.get(i);
             ArrayList<String> clients = new ArrayList<String>();
             for (int j = 0; j< item.client_apps.size(); j++) {
-              /*if (!item.client_apps.get(j).client_type.equals("android")) {
-                availableAppsCache.remove(i);
-                i--;
-              } else {
-                Log.i("AppChooser", "Item name: " + item.name );
-                runningAppsNames.add(item.name);
-              }*/ 
+ 
               clients.add(item.client_apps.get(j).client_type);
             }
 
@@ -406,16 +387,6 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
             }
 
           }
-          //if (runningAppsCache.size() != 0) {
-          //  availableAppsCache.add(runningAppsCache.get(0));
-          //}
-          /*for (int k = 0; k < runningAppsCache.size(); k++) {
-            App runningItem = runningAppsCache.get(k);
-            Log.i("AppChooser", "Running item name: " + runningItem.name );
-            if (!runningAppsNames.contains(runningItem.name)) {
-              availableAppsCache.add(runningItem);
-            }
-          } */
           Log.i("RosAndroid", "ListApps.Response: " + availableAppsCache.size() + " apps");
           availableAppsCacheTime = System.currentTimeMillis();
           runOnUiThread(new Runnable() {
@@ -697,14 +668,21 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
     switch (id) {
       case CLOSE_EXISTING:
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-          builder.setTitle("Stop Current Application?");
-          builder.setMessage("There is an application already running. You cannot run two applications at once. Would you like to stop the current application?");
-          builder.setPositiveButton( "Stop Current", new DialogButtonClickHandler() );
-          builder.setNegativeButton( "Don't Stop", new DialogButtonClickHandler());
-          dialog = builder.create();
+        builder.setTitle("Stop Current Application?");
+        builder.setMessage("There is an application already running. You cannot run two applications at once. Would you like to stop the current application?");
+        builder.setPositiveButton( "Stop Current", new DialogButtonClickHandler() );
+        builder.setNegativeButton( "Don't Stop", new DialogButtonClickHandler());
+        dialog = builder.create();
+        break;
+      case MULTI_APP_DISABLED:
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Multi-App Disabled on Robot");
+        builder.setMessage("The mode for running multiple apps is disabled on the robot. If you would like to enable it then you can change the arguments that the App Manager gets in its launch file.");
+        builder.setNeutralButton( "Okay", new DialogButtonClickHandler());
         break;
       default:
         dialog = null;
+
     }
     return dialog;
   }
@@ -721,6 +699,9 @@ public class AppChooser extends RosAppActivity implements AppManager.Termination
           break;
         case DialogInterface.BUTTON_NEGATIVE:
           removeDialog(CLOSE_EXISTING);
+          break;
+        case DialogInterface.BUTTON_NEUTRAL:
+          removeDialog(MULTI_APP_DISABLED);
           break;
       }
     }
